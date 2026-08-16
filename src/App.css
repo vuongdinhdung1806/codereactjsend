@@ -1,0 +1,154 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #f4f6f9;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+form {
+  width: 650px;
+  margin: 40px auto;
+  background: #f4f9f7;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  margin: 30px 0;
+  font-size: 42px;
+}
+
+h2,
+h3 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+hr {
+  margin: 25px 0;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #6106f4;
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: rgb(23, 22, 22);
+  font-size: 15px;
+}
+
+button[type="button"] {
+  background: #2196f3;
+  margin-right: 10px;
+}
+
+button[type="button"]:hover {
+  background: #388e3c;
+}
+
+button[type="submit"] {
+  background: #2196f3;
+}
+
+button[type="submit"]:hover {
+  background: #388e3c;
+}
+
+ul {
+  margin: 15px 0;
+  padding-left: 20px;
+}
+
+li {
+  margin-bottom: 8px;
+  padding: 5px;
+  border-bottom: 1px solid#1a1919;
+}
+
+.navbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: fit-content;
+  margin: 0 auto;
+
+  padding: 10px 16px;
+  background: #2196f3;
+  border-radius: 6px;
+  gap: 10px;
+}
+.Home-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+}
+.todo-container {
+  width: 700px;
+  max-width: 90%;
+  margin: 0 auto;
+}
+.todo-item {
+  background: white;
+  padding: 20px;
+  margin: 15px 0;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+.filter-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+.todo-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.todo-check input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+}
+.child-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.child-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+}
+.child-item button {
+  margin-left: auto;
+}
