@@ -1,18 +1,23 @@
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
 import TodoList from "../component/TodoList";
 
-function TodoListPage({
-  todos,
-  addChildTodo,
-  toggleCompleted,
-  deleteTodo,
-  filter,
-  setFilter,
-  searchName,
-  setSearchName,
-  sortOrder,
-  setSortOrder,
-}) {
+import { setFilter, setSearchName, setSortOrder } from "../redux/actions";
+import { useEffect } from "react";
+import { fetchTodos } from "../redux/actions";
+function TodoListPage() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    console.log("FETCH TODOS ĐƯỢC GỌI");
+    dispatch(fetchTodos());
+  }, [dispatch]);
+  const { filter, searchName, sortOrder, currentPage, limit, total } =
+    useSelector((state) => state);
+  const totalPages = Math.max(1, Math.ceil(total / limit));
+  const handlePageChange = (page) => {
+    dispatch(fetchTodos(page, limit));
+  };
   return (
     <div className="todo-container">
       <div className="list-todo-page">
@@ -27,33 +32,42 @@ function TodoListPage({
             <button>➕ Thêm công việc</button>
           </Link>
         </div>
+
         <div className="filter-buttons">
-          <button type="button" onClick={() => setFilter("all")}>
+          <button type="button" onClick={() => dispatch(setFilter("all"))}>
             Tất cả
           </button>
 
-          <button type="button" onClick={() => setFilter("completed")}>
+          <button
+            type="button"
+            onClick={() => dispatch(setFilter("completed"))}
+          >
             Đã hoàn thành
           </button>
 
-          <button type="button" onClick={() => setFilter("uncompleted")}>
+          <button
+            type="button"
+            onClick={() => dispatch(setFilter("uncompleted"))}
+          >
             Chưa hoàn thành
           </button>
         </div>
+
         <div className="search-box">
           <input
             type="text"
             placeholder="Tìm tên công việc..."
             value={searchName}
-            onChange={(e) => setSearchName(e.target.value)}
+            onChange={(e) => dispatch(setSearchName(e.target.value))}
           />
         </div>
+
         <div className="sort-box">
           <label>Sắp xếp:</label>
 
           <select
             value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value)}
+            onChange={(e) => dispatch(setSortOrder(e.target.value))}
           >
             <option value="newest">Mới nhất</option>
 
@@ -61,20 +75,42 @@ function TodoListPage({
           </select>
         </div>
 
-        {todos.length === 0 ? (
-          <p>Chưa có công việc nào.</p>
-        ) : (
-          <TodoList
-            todos={todos}
-            addChildTodo={addChildTodo}
-            toggleCompleted={toggleCompleted}
-            deleteTodo={deleteTodo}
-            filter={filter}
-            setFilter={setFilter}
-          />
-        )}
+        <TodoList />
+        <div className="pagination">
+          <button
+            type="button"
+            disabled={currentPage === 1}
+            onClick={() => handlePageChange(currentPage - 1)}
+          >
+            ←
+          </button>
+
+          {Array.from({ length: totalPages }, (_, index) => {
+            const page = index + 1;
+
+            return (
+              <button
+                key={page}
+                type="button"
+                onClick={() => handlePageChange(page)}
+                className={currentPage === page ? "active" : ""}
+              >
+                {page}
+              </button>
+            );
+          })}
+
+          <button
+            type="button"
+            disabled={currentPage >= totalPages}
+            onClick={() => handlePageChange(currentPage + 1)}
+          >
+            →
+          </button>
+        </div>
       </div>
     </div>
   );
 }
+
 export default TodoListPage;

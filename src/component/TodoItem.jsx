@@ -1,39 +1,80 @@
 import { useState } from "react";
-function TodoItem({ todo, addChildTodo, toggleCompleted, deleteTodo }) {
-  const [showChildren, setShowChildren] = useState(false); // child đang đóng
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+import { addChildTodo, toggleCompleted, deleteTodo } from "../redux/actions";
+
+function TodoItem({ todo }) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [showChildren, setShowChildren] = useState(false);
+
   const [childName, setChildName] = useState("");
+
   const handleAddChild = () => {
     if (!childName.trim()) return;
 
-    addChildTodo(todo.id, {
-      name: childName,
-      description: "",
-      priority: "medium",
-      dueDate: "",
-    });
+    dispatch(
+      addChildTodo(todo.id, {
+        name: childName,
+        description: "",
+        priority: "medium",
+        dueDate: "",
+      }),
+    );
 
     setChildName("");
 
     setShowChildren(true);
   };
+
   return (
     <div className="todo-item">
       <div className="parent-todo">
         <input
           type="checkbox"
           checked={todo.completed}
-          onChange={() => toggleCompleted(todo.id)}
+          onChange={() => {
+            if (
+              !todo.completed &&
+              todo.children &&
+              todo.children.length > 0 &&
+              !todo.children.every((child) => child.completed)
+            ) {
+              alert("Hãy hoàn thành tất cả công việc con trước!");
+              return;
+            }
+
+            dispatch(toggleCompleted(todo.id));
+          }}
         />
+
         <h3
           onClick={() => setShowChildren(!showChildren)}
-          style={{ cursor: "pointer" }}
+          style={{
+            cursor: "pointer",
+          }}
         >
           {todo.name}
         </h3>
-        <button type="button" onClick={() => deleteTodo(todo.id)}>
+        <button type="button" onClick={() => navigate(`/edit/${todo.id}`)}>
+          Sửa
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            if (
+              window.confirm("Bạn có chắc chắn muốn xóa công việc này không?")
+            ) {
+              dispatch(deleteTodo(todo.id));
+            }
+          }}
+        >
           Xóa
         </button>
       </div>
+
       <p>{todo.description}</p>
 
       <p>Ưu tiên: {todo.priority}</p>
@@ -43,21 +84,31 @@ function TodoItem({ todo, addChildTodo, toggleCompleted, deleteTodo }) {
       {showChildren && (
         <div className="child-list">
           <h4>Child Tasks</h4>
+
           {todo.children && todo.children.length > 0 ? (
             todo.children.map((child) => (
               <div key={child.id} className="child-item">
                 <input
                   type="checkbox"
                   checked={child.completed}
-                  onChange={() => toggleCompleted(todo.id, child.id)}
+                  onChange={() => dispatch(toggleCompleted(todo.id, child.id))}
                 />
 
                 <span>{child.name}</span>
+
                 <button
                   type="button"
-                  onClick={() => deleteTodo(todo.id, child.id)}
+                  onClick={() => {
+                    if (
+                      window.confirm(
+                        "Bạn có chắc chắn muốn xóa công việc con này không?",
+                      )
+                    ) {
+                      dispatch(deleteTodo(todo.id, child.id));
+                    }
+                  }}
                 >
-                  xoá
+                  Xóa
                 </button>
               </div>
             ))

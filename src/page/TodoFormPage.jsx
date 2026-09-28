@@ -1,9 +1,9 @@
 import TodoForm from "../component/TodoForm";
-function TodoFormPage({ addTodo }) {
+function TodoFormPage() {
   return (
     <div className="add-todo-page">
       <h1> Thêm công việc</h1>
-      <TodoForm addTodo={addTodo}></TodoForm>
+      <TodoForm />
     </div>
   );
 }

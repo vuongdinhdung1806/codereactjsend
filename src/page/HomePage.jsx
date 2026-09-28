@@ -1,5 +1,10 @@
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleTheme } from "../redux/actions";
 function HomePage() {
+  const dispatch = useDispatch();
+  const theme = useSelector((state) => state.theme);
+
   return (
     <div className="Home-page">
       <h1>Todos</h1>
@@ -11,6 +16,9 @@ function HomePage() {
           <button>Danh sách công việc</button>
         </Link>
       </div>
+      <button type="button" onClick={() => dispatch(toggleTheme())}>
+        {theme === "light" ? "🌙 Dark" : "☀️ Light"}
+      </button>
     </div>
   );
 }
